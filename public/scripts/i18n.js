@@ -227,12 +227,22 @@ async function getMissingTranslations() {
     console.table(uniqueMissingData);
     console.log(`Full map of missing data (${Object.keys(missingDataMap).length}):`);
     console.log(missingDataMap);
+    const mapCanBeStringify = {};
+    for (const [key, value] of Object.entries(missingDataMap)) {
+        mapCanBeStringify[key] = value.replace(/"/g, '\\"');
+    }
 
     if (trackMissingDynamicTranslate) {
         const trackMissingDynamicTranslateMap = Object.fromEntries(Array.from(trackMissingDynamicTranslate).map(key => [key, key]));
         console.log(`Dynamic translations missing (${Object.keys(trackMissingDynamicTranslateMap).length}):`);
         console.log(trackMissingDynamicTranslateMap);
+        for (const [key, value] of Object.entries(trackMissingDynamicTranslateMap)) {
+            mapCanBeStringify[key] = value.replace(/"/g, '\\"');
+        }
     }
+
+    console.log('You can copy the following JSON object for easier translation file creation:');
+    console.log(JSON.stringify(mapCanBeStringify, null, 4));
 
     toastr.success(`Found ${uniqueMissingData.length} missing translations. See browser console for details.`);
 }
